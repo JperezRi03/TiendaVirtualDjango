@@ -25,6 +25,19 @@
         </ul>
         <img src="{% static 'imagenes/Gorra.jpg' %}" alt="Gorra" width="80">
     </div>
+    {% if messages%}
+        {% for m in messages%}
+            {% if m.tags  == 'text-success'%}
+                <div class="alert alert-success">
+                    {{m}}
+                </div>
+            {%else%}
+                <div class="alert alert-danger">
+                    {{m}}
+                </div>
+            {%endif%}
+        {%endfor%}
+    {%endif%}
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/hello.js' %}"></script>
