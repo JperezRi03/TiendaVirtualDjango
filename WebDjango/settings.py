@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-1tm++gi@9w2w3(oboypcm4(!c8yy)(+!)q-b+@!k(xvs9=@db0
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+#SOCIAL_AUTH_FACEBOOK_KEY = "key"
+#SOCIAL_AUTH_FACEBOOK_SECRET = "secret"
 
 # Application definition
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+#    'social_django',
 ]
 
 MIDDLEWARE = [
