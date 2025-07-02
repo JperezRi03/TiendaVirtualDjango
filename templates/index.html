@@ -4,15 +4,11 @@
     <div class="container">
         <h1>{{ mensaje }}</h1>
         <ul class="list-group">
-            {% for i in personas %}
+            {% for i in object_list %}
             <li class="list-group-item">
-                {{ i.titulo }}
+                {{i}}
                 <span>
-                    {% if i.Stock %}
-                    <span class="text-success"> Hay en Stock </span>
-                    {% else %}
-                    <span class="text-danger"> NO hay En Stock </span>
-                    {% endif %}
+                    <span class="text-success"> {{i.price}} </span>
                 </span>
             </li>
             {%endfor%}

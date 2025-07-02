@@ -4,20 +4,19 @@ from django.contrib.auth import login as lg , authenticate , logout
 from django.contrib import messages
 from .forms import Registro
 from django.contrib.auth.models import User
+from products.models import Product
 
 def index(request ):
+    productos = Product.objects.all()
     return render(request, 'index.html', {
         'mensaje' : 'Tienda',
         'titulo': 'Inicio',
-        'personas' : [
-            {'titulo':'Campera', 'precio':20, 'Stock':False},
-            {'titulo':'Pantalon', 'precio':10, 'Stock':False},
-            {'titulo':'Ramera', 'precio':35, 'Stock':True},
-            {'titulo':'Gorra', 'precio':81, 'Stock':True}
-        ]
+        'productos': productos,
     })
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -37,6 +36,8 @@ def salir(request):
     return redirect(login)
 
 def registro(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     form = Registro(request.POST or None)
     if request.method=='POST' and form.is_valid() :
         usuario = form.save() 
