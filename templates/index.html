@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-{% load static %}
-<html>
-<head>
-    <meta charset='utf-8'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <title>{{titulo}}</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     <div class="container">
         <h1>{{ mensaje }}</h1>
         <ul class="list-group">
@@ -15,7 +9,7 @@
                 {{ i.titulo }}
                 <span>
                     {% if i.Stock %}
-                    <span class="text-success"> hay en Stock </span>
+                    <span class="text-success"> Hay en Stock </span>
                     {% else %}
                     <span class="text-danger"> NO hay En Stock </span>
                     {% endif %}
@@ -23,22 +17,6 @@
             </li>
             {%endfor%}
         </ul>
-        <img src="{% static 'imagenes/Gorra.jpg' %}" alt="Gorra" width="80">
     </div>
-    {% if messages%}
-        {% for m in messages%}
-            {% if m.tags  == 'text-success'%}
-                <div class="alert alert-success">
-                    {{m}}
-                </div>
-            {%else%}
-                <div class="alert alert-danger">
-                    {{m}}
-                </div>
-            {%endif%}
-        {%endfor%}
-    {%endif%}
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'js/hello.js' %}"></script>
-</html>
+{% endblock %}
+{% load static %}
