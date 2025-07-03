@@ -3,16 +3,11 @@
 {% block content %}
     <div class="container">
         <h1>{{ mensaje }}</h1>
-        <ul class="list-group">
-            {% for i in object_list %}
-            <li class="list-group-item">
-                {{i}}
-                <span>
-                    <span class="text-success"> {{i.price}} </span>
-                </span>
-            </li>
-            {%endfor%}
-        </ul>
+        {% include "products/snippets/search.html" %}
+
+        <div class="row">
+        {% include "products/snippets/listP.html" %}
+        </div>
     </div>
 {% endblock %}
 {% load static %}

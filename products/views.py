@@ -24,3 +24,19 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class ProductSearch(ListView):
+    template_name = 'products/search.html'
+
+    def get_queryset(self):
+        return Product.objects.filter(title__contains=self.query())
+
+    def query(self):
+        return self.request.GET.get('busqueda')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.query()
+
+        return context
