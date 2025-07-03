@@ -2,16 +2,25 @@
 
 
 {% block content %}
-<div class="col">
-    <div class="h1">Product: {{product.title}}</div>
-
-    <div class="h5 font-weight-bold"> 
-        Precion : <span class="text-danger">${{ product.price }} </span>
+<div class="col-3">
+    {% if product.image %}
+        <img src="{{product.image.url}}" alt="Imagen" width="200" height="200">
+    {%endif%}
     </div>
 
-    <p>
-      Descripcion: {{product.description}}  
-    </p>
+    <div class="col">
+        <div class="h1">Product: {{product.title}}</div>
+
+            <div class="h5 font-weight-bold"> 
+                Precion : <span class="text-danger">${{ product.price }} </span>
+            </div>
+            <div class=" alert alert-info ">
+                <strong>
+                    Descripcion: {{product.description}}  
+                </strong>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
