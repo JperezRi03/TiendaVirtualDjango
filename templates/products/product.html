@@ -17,8 +17,12 @@
             <div class=" alert alert-info ">
                 <strong>
                     Descripcion: {{product.description}}  
-                </strong>
+                </strong>                
             </div>
+            <div>
+                {% include 'carts/snippets/add.html' %}
+            </div>     
+                   
         </div>
     </div>
 </div>

@@ -1,1 +1,4 @@
 autenticacion.txt
+__pycache__
+*.py[cod]
+categories/__pycache__/
