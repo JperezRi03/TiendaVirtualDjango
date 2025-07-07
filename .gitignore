@@ -1,4 +1,4 @@
 autenticacion.txt
-__pycache__
+# Ignorar archivos compilados de Python
+__pycache__/
 *.py[cod]
-categories/__pycache__/
