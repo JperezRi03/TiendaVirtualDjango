@@ -1,24 +1,53 @@
 {% extends 'base.html' %}
-
+{% load function_tag %}
 {% block content%}
-<h2> Mis compras </h2>
-<ul>
-    <li>
-        PC
-    </li>
+{% if cart.products.exists %}
+<div class="col-8">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in cart.products.all %}
 
-    <li>
-        Cel       
-    </li>
+            <tr>
+                <th>{{forloop.counter}}</th>
+                <th>
+                    {% if product.image %}
+                    <img src="{{product.image.url}}" alt="ImagenProducto" width="70" height="70">
+                    {%endif%}
+                </th>
+                <th>
+                    <a href="{% url 'product' product.slug %}">{{product.title}}</a>
+                </th>
+                <th>
+                    13
+                </th>
+                <th>
+                    <span class="font-weight-bold text-danger"> {{product.price | precio_tag}} </span>
+                    {% include 'carts/snippets/remove.html' %}
+                </th>
 
-    <li>
-        Zapatos
-    </li>
+            </tr>
 
-    <h3>Subtotal</h3>
-    <h2>Total</h2>
+            {%endfor%}
 
-</ul>
 
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+    <div class="col">
+        <p class="h3"> El carrito no tiene productos </p>
+        <a href="{% url 'index' %}"> Comprar Ahora </a>
+    </div>
+{% endif %}
 
 {% endblock %}
