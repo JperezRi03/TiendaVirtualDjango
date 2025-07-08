@@ -19,7 +19,7 @@
                 </tr>
                 <tr class="table-info">
                     <td>Envio:</td>
-                    <td>{{ orden.envio_total }}</td>
+                    <td>{{ orden.envio_total | precio_tag}}</td>
                 </tr>
             </tbody>
         </table>
@@ -33,5 +33,8 @@
                 {{ orden.total | precio_tag }}
             </div>
         </div>
+    </div>
+    <div class="d-grid gap-2 mt-3">
+        <a  class="btn btn-warning" href="#">Continuar</a>
     </div>
 </div>

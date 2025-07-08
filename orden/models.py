@@ -25,10 +25,22 @@ class Orden(models.Model):
     def __str__(self):
         return self.ordenID
     
+    def get_total(self):
+        return self.cart.total + self.envio_total
+    
+    def update_total(self):
+        self.total = self.get_total()
+        self.save()
 
 def enviarOrden(sender, instance , *args,  **kwargs):
     if not instance.ordenID:
         instance.ordenID = str(uuid.uuid4())
 
+def enviar_total(sender, instance , *args,  **kwargs):
+    instance.total = instance.get_total()
+
+
+
 pre_save.connect(enviarOrden , sender=Orden)
+pre_save.connect(enviar_total, sender=Orden)
 # Create your models here.

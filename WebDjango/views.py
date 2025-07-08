@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import Registro
 from django.contrib.auth.models import User
 from products.models import Product
+from django.http import HttpResponseRedirect
 
 def index(request ):
     productos = Product.objects.all()
@@ -25,6 +26,9 @@ def login(request):
         if usuarios:
             lg(request,usuarios)
             messages.success(request, f'Bienvenido {usuarios.username}')
+
+            if request.GET.get('next'):
+                return HttpResponseRedirect(request.GET['next'])
             return redirect('index')
         else:
             messages.error(request, 'Datos Incorrectos.')
