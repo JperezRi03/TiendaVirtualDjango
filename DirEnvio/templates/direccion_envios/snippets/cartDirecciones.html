@@ -1,0 +1,25 @@
+<div class="card">
+    <h4 class="card-header">
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ i.direccion }}
+                <div class="card-title">
+                    {{i.reference}}
+                </div>
+                <div class="card-title">
+                    {{ i.postal_code }}
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'update' i.pk %}" class="btn btn-primary"> Editar </a>
+                    {% if i.default %}
+                        <div>
+                            <span class="badge bg-success"> Direccion Principal </span>
+                        </div>
+                    {% else %}
+                    <a href="#" class="btn btn-danger"> Default </a>
+                    {% endif %}
+                </div>
+            </h5>
+        </div>
+    </h4>
+</div>

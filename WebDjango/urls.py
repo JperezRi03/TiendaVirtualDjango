@@ -33,7 +33,7 @@ urlpatterns = [
     path('productos/', include("products.urls")),
     path('carrito/', include("carts.urls")),
     path('orden/', include("orden.urls")),
-
+    path('direcciones/', include("DirEnvio.urls")),
 #    path('social-auth/', include('social_django.urls', namespace="social")),
 ]
 if settings.DEBUG:

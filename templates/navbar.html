@@ -1,7 +1,7 @@
 {% url 'login' as login%}
 {% url 'registro' as registro%}
 {% url 'carts' as cart %}
-
+{% url 'direccion_envio' as direccion_envio %}
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -34,9 +34,20 @@
           {%endif%}
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'cart' %}"> Carrito </a>
+              <a class="nav-link" href="{% url 'cart' %}"> Carrito 
+                <span class="fas fa-shopping-cart"></span></a>
             </li>
           </ul>
+
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'direccion_envio' %}"> Mis direcciones 
+                <span class="fas fa-location-arrow"></span></a>
+            </li>
+          </ul>      
+          {%endif%}
+
       </div>
     </div>
   </div>
