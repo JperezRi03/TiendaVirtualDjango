@@ -1,17 +1,20 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.shortcuts import render, redirect
+from django.http import HttpRequest
+from django.http.response import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import DireccionEnvio
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 from .forms import DireccionEnvioForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.edit import DeleteView
 
 class EnvioDirecciones(LoginRequiredMixin , ListView):
     login_url = 'login'
@@ -49,3 +52,31 @@ class UpdateDireccion(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         return reverse('direccion_envio')
     
+
+class DeleateDireccion(LoginRequiredMixin, DeleteView):
+    login_url = 'login'
+    model = DireccionEnvio
+    template_name = 'direccion_envios/deleate.html'
+    success_url = reverse_lazy('direccion_envio')
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().default: # type: ignore
+            return redirect('direccion_envio')
+        
+        if request.user.id != self.get_object().user_id: # type: ignore
+            return redirect('index')
+        
+        return super(DeleateDireccion, self).dispatch(request , *args, **kwargs)
+
+@login_required(login_url='login') # type: ignore
+def FuncDefault(request, pk):
+    direccion_envio = get_object_or_404( DireccionEnvio , pk=pk )
+
+    if request.user.id != direccion_envio.user_id: # type: ignore
+        return redirect('index')
+    
+    if request.user.has_direccion_envio():
+        request.user.direccion_envio.update_default()
+    direccion_envio.update_default(True)
+
+    return redirect('direccion_envio')
