@@ -1,7 +1,7 @@
 from typing import Any
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse , HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import DireccionEnvio
@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import DeleteView
+from carts.funciones import funcionesCarrito
+from orden.utils import funcionOrden
 
 class EnvioDirecciones(LoginRequiredMixin , ListView):
     login_url = 'login'
@@ -32,8 +34,18 @@ def formularioDir(request):
     if request.method == 'POST' and form.is_valid():
         direccion_envio = form.save(commit=False)
         direccion_envio.user = request.user
-        direccion_envio.default = not DireccionEnvio.objects.filter(user = request.user).exists()
+        direccion_envio.default = not request.user.has_direccion_envio()
         direccion_envio.save()
+
+        if request.GET.get('next'):
+            if request.GET['next'] == reverse('direccion'):
+                cart = funcionesCarrito(request)
+                orden = funcionOrden(cart , request)
+
+                orden.update_direccion_envio(direccion_envio)
+
+                return HttpResponseRedirect(request.GET['next'])
+
         messages.success(request, 'Direccion Creada Correctamente')
         return redirect('direccion_envio')
 
