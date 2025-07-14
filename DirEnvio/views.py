@@ -75,6 +75,10 @@ class DeleateDireccion(LoginRequiredMixin, DeleteView):
         if self.get_object().default: # type: ignore
             return redirect('direccion_envio')
         
+        if self.get_object().has_orden(): # type: ignore
+            messages.error(request, 'No puedes eliminar una direccion asociada a la orden')
+            return redirect('direccion_envio')
+        
         if request.user.id != self.get_object().user_id: # type: ignore
             return redirect('index')
         

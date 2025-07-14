@@ -1,18 +1,11 @@
 from django.db import models
+from orden.comun import OrdenStatus, choices
 from users.models import User
 from carts.models import Cart
-from enum import Enum
 from django.db.models.signals import pre_save
 from DirEnvio.models import DireccionEnvio
 import uuid
 
-class OrdenStatus(Enum):
-    CREATED = 'CREATED'
-    PAYED = 'PAYED'
-    COMPLETED = 'COMPLETED'
-    CANCELED = 'CANCELED'
-
-choices = [( tag, tag.value) for tag in OrdenStatus]
 
 class Orden(models.Model):
     ordenID = models.CharField(max_length=100, null=False, blank=False, unique=True)
@@ -42,6 +35,14 @@ class Orden(models.Model):
         if direccion_envio:
             self.update_direccion_envio(direccion_envio)
         return direccion_envio
+
+    def cancelar(self):
+        self.status = OrdenStatus.CANCELED
+        self.save()
+
+    def completado(self):
+        self.status = OrdenStatus.COMPLETED
+        self.save()
     
     def update_direccion_envio(self, direccion_envio):
         self.direccion_envio = direccion_envio

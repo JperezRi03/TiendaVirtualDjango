@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from DirEnvio.models import DireccionEnvio
-from carts.funciones import funcionesCarrito
+from carts.funciones import funcionesCarrito , deleteCart
 from .models import Orden
-from .utils import funcionOrden
+from .utils import deleteOrden, funcionOrden
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .utils import breadcrumb
 
 @login_required(login_url='login')
@@ -23,12 +24,14 @@ def direccion(request):
     cart = funcionesCarrito(request)
     orden = funcionOrden(cart,request)
 
-    direccion_envio = orden.get_or_set_direccion_envio() 
+    direccion_envio = orden.get_or_set_direccion_envio()
+    contDireccion = request.user.direccionenvio_set.count()>1 
 
     return render(request, 'orden/direccion.html',{
         'cart' : cart,
         'orden' : orden,
         'direccion_envio' : direccion_envio,
+        'contDireccion' : contDireccion,
         'breadcrumb' : breadcrumb(address=True),
     })
 
@@ -53,3 +56,50 @@ def check_direccion(request , pk):
     orden.update_direccion_envio(direccion_envios)
 
     return redirect('direccion')
+
+@login_required(login_url='login')
+def confirmacion(request):
+    cart = funcionesCarrito(request)
+    orden = funcionOrden(cart , request )
+
+    direccion_envio = orden.direccion_envio
+    if direccion_envio is None: 
+        return redirect('direccion')
+    return render(request, 'orden/confirmacion.html', {
+        'cart' : cart,
+        'orden' : orden,
+        'direccion_envio' : direccion_envio,
+        'breadcrumb' : breadcrumb(address=True, confirmation=True), 
+    })
+
+@login_required(login_url='login')
+def cancelar_orden(request):
+    cart = funcionesCarrito(request)
+    orden = funcionOrden(cart , request)
+
+    if request.user.id != orden.user_id: # type: ignore
+        return redirect('index')
+    
+    orden.cancelar()
+    deleteCart(request)
+    deleteOrden(request)
+    
+    messages.error(request, 'Orden eliminada Correctamente')
+    return redirect('index')
+
+@login_required(login_url='login')
+def completado(request):
+    cart = funcionesCarrito(request)
+    orden = funcionOrden(cart,request)
+
+    if request.user.id != orden.user_id: # type: ignore
+        return redirect('index')
+    
+    orden.completado()
+
+    deleteCart(request)
+    deleteOrden(request)
+
+    messages.success(request, 'Compra completada llegara a destino')
+    return redirect('index')
+         

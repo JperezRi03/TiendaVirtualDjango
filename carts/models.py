@@ -1,4 +1,5 @@
 from django.db import models
+from orden.comun import OrdenStatus
 from users.models import User
 from products.models import Product
 from django.db.models.signals import pre_save, m2m_changed , post_save
@@ -38,7 +39,7 @@ class Cart(models.Model):
     
     @property
     def orden(self):
-        return self.orden_set.first() # type: ignore
+        return self.orden_set.filter(status= OrdenStatus.CREATED).first # type: ignore
 
 class CartProductManager(models.Manager):
     def crearActualizar(self,cart,product,quantity=1):
