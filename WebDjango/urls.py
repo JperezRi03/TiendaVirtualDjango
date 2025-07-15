@@ -35,6 +35,8 @@ urlpatterns = [
     path('orden/', include("orden.urls")),
     path('direcciones/', include("DirEnvio.urls")),
 #    path('social-auth/', include('social_django.urls', namespace="social")),
+    path('codigopromo/', include("promo_codigo.urls")),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
