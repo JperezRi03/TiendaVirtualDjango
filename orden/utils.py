@@ -2,14 +2,13 @@ from .models import Orden
 from django.urls import reverse
 
 def funcionOrden(cart , request):
-    orden = cart.orden
+    orden = cart.orden()
 
     if orden is None and request.user.is_authenticated:
         orden = Orden.objects.create(cart=cart ,user = request.user)
     
     if orden:
         request.session['orden_id'] = orden.id  # type: ignore
-
     return orden
 
 def breadcrumb(products=True, address=False, payment=False, confirmation=False):

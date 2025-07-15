@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
 
+from orden.comun import OrdenStatus
+
 
 # Create your models here.
 
@@ -18,15 +20,16 @@ class User(AbstractUser):
     
     def has_direccion_envio(self):
         return self.direccion_envio is not None
+    
+    def ordenes_completadas(self):
+        return self.orden_set.filter(status=OrdenStatus.COMPLETED).order_by('-id') # type: ignore
 
 class Cliente(User):
     class Meta: 
         proxy = True
 
-    
     def get_product(self):
         return [] 
-    
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=CASCADE)

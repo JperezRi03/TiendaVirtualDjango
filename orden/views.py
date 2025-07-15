@@ -6,12 +6,21 @@ from .utils import deleteOrden, funcionOrden
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .utils import breadcrumb
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .decorador import validar_cart_and_orden
+
+class OrdenViews(LoginRequiredMixin , ListView ):
+    login_url='login'
+    template_name = 'orden/ordenes.html'
+
+    def get_queryset(self): # type: ignore
+        return self.request.user.ordenes_completadas() # type: ignore
+ 
 
 @login_required(login_url='login')
-def orden(request):
-    cart = funcionesCarrito(request)
-    orden = funcionOrden(cart, request)
-
+@validar_cart_and_orden
+def orden(request, cart, orden):
     return render(request , 'orden/orden.html', {
         'cart' : cart,
         'orden': orden,
@@ -20,10 +29,8 @@ def orden(request):
 # Create your views here.
 
 @login_required(login_url='login')
-def direccion(request):
-    cart = funcionesCarrito(request)
-    orden = funcionOrden(cart,request)
-
+@validar_cart_and_orden
+def direccion(request, cart, orden):
     direccion_envio = orden.get_or_set_direccion_envio()
     contDireccion = request.user.direccionenvio_set.count()>1 
 
@@ -44,10 +51,8 @@ def select_direccion(request):
     })
 
 @login_required(login_url='login')
-def check_direccion(request , pk):
-    cart = funcionesCarrito(request) 
-    orden = funcionOrden(cart, request)
-
+@validar_cart_and_orden
+def check_direccion(request , pk, cart, orden):
     direccion_envios = get_object_or_404(DireccionEnvio, pk=pk)
 
     if request.user.id != direccion_envios.user_id: # type: ignore
@@ -58,10 +63,8 @@ def check_direccion(request , pk):
     return redirect('direccion')
 
 @login_required(login_url='login')
-def confirmacion(request):
-    cart = funcionesCarrito(request)
-    orden = funcionOrden(cart , request )
-
+@validar_cart_and_orden
+def confirmacion(request, cart, orden):
     direccion_envio = orden.direccion_envio
     if direccion_envio is None: 
         return redirect('direccion')
@@ -73,10 +76,8 @@ def confirmacion(request):
     })
 
 @login_required(login_url='login')
-def cancelar_orden(request):
-    cart = funcionesCarrito(request)
-    orden = funcionOrden(cart , request)
-
+@validar_cart_and_orden
+def cancelar_orden(request, cart, orden):
     if request.user.id != orden.user_id: # type: ignore
         return redirect('index')
     
@@ -88,10 +89,8 @@ def cancelar_orden(request):
     return redirect('index')
 
 @login_required(login_url='login')
-def completado(request):
-    cart = funcionesCarrito(request)
-    orden = funcionOrden(cart,request)
-
+@validar_cart_and_orden
+def completado(request, cart, orden):
     if request.user.id != orden.user_id: # type: ignore
         return redirect('index')
     
