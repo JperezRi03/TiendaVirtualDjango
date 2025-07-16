@@ -5,7 +5,8 @@ from carts.models import Cart
 from promo_codigo.models import PromoCodigo as g
 from django.db.models.signals import pre_save
 from DirEnvio.models import DireccionEnvio
-import uuid, decimal
+import uuid
+from decimal import Decimal
 from promo_codigo.models import PromoCodigo
 
 class Orden(models.Model):
@@ -38,7 +39,7 @@ class Orden(models.Model):
 
     
     def get_total(self):
-        return self.cart.total + self.envio_total - decimal.Decimal(self.get_descuento())
+        return Decimal(self.cart.total) + Decimal(self.envio_total) - Decimal(self.get_descuento())
     
     def update_total(self): 
         self.total = self.get_total()
