@@ -29,7 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 #SOCIAL_AUTH_FACEBOOK_KEY = "key"
 #SOCIAL_AUTH_FACEBOOK_SECRET = "secret"
-
+#STRIPE_PUBLIC_KEY='****'
+#STRIPE_PRIVATE_KEY='****'
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'orden',
     'DirEnvio',
     'promo_codigo',
+    'MetodoPago',
 ]
 
 MIDDLEWARE = [

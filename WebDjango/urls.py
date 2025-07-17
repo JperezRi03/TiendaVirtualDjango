@@ -36,6 +36,7 @@ urlpatterns = [
     path('direcciones/', include("DirEnvio.urls")),
 #    path('social-auth/', include('social_django.urls', namespace="social")),
     path('codigopromo/', include("promo_codigo.urls")),
+    path('pagos/', include("MetodoPago.urls")),
 ]
 
 if settings.DEBUG:
